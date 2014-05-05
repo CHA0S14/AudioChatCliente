@@ -3,7 +3,6 @@ package es.cios.audiochat.util;
 import java.io.File;
 import java.io.IOException;
 
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -15,28 +14,38 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 @SuppressWarnings("serial")
 public class Reproductor extends java.applet.Applet {
 
-	public static void startPlay(String filename) {
+	/**
+	 * inicia la reproducción
+	 * @param file fichero a reproducir
+	 */
+	public static void startPlay(File file) {
 		try {
-			//crea el file a reproducir
-			File file = new File(filename);
 			AudioInputStream in = AudioSystem.getAudioInputStream(file);
 			//se crea el formato de audio
 			AudioFormat baseFormat = in.getFormat();
 			//se llama al método para reproducir
 			rawplay(baseFormat, in);
+			
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Convertir en reproductor error
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
+			// TODO Convertir en reproductor error
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {
-			// TODO 
+			// TODO Convertir en reproductor error
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * reproduce el archivo
+	 * @param targetFormat formato que tiene el archivo
+	 * @param din el input stream que contiene el audio
+	 * @throws IOException error si el fichero no existe
+	 * @throws LineUnavailableException error de línea invalida
+	 */
 	private static void rawplay(AudioFormat targetFormat, AudioInputStream din)
 			throws IOException, LineUnavailableException {
 		byte[] data = new byte[4096];
@@ -63,7 +72,7 @@ public class Reproductor extends java.applet.Applet {
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class,
 				audioFormat);
 		res = (SourceDataLine) AudioSystem.getLine(info);
-		res.open(audioFormat);
+		res.open(audioFormat);		
 		return res;
 	}
 }
