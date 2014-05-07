@@ -11,6 +11,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import es.cios.audiochat.exceptions.ReproductorException;
+
 @SuppressWarnings("serial")
 public class Reproductor extends java.applet.Applet {
 
@@ -18,7 +20,7 @@ public class Reproductor extends java.applet.Applet {
 	 * inicia la reproducción
 	 * @param file fichero a reproducir
 	 */
-	public static void startPlay(File file) {
+	public static void startPlay(File file) throws ReproductorException{
 		try {
 			AudioInputStream in = AudioSystem.getAudioInputStream(file);
 			//se crea el formato de audio
@@ -28,14 +30,11 @@ public class Reproductor extends java.applet.Applet {
 			
 			in.close();
 		} catch (IOException e) {
-			// TODO Convertir en reproductor error
-			e.printStackTrace();
+			throw new ReproductorException("Error de reproduccion: " + e.getMessage(), e);
 		} catch (LineUnavailableException e) {
-			// TODO Convertir en reproductor error
-			e.printStackTrace();
+			throw new ReproductorException("Error de reproduccion: " + e.getMessage(), e);
 		} catch (UnsupportedAudioFileException e) {
-			// TODO Convertir en reproductor error
-			e.printStackTrace();
+			throw new ReproductorException("Error de reproduccion: " + e.getMessage(), e);
 		}
 	}
 
@@ -66,6 +65,12 @@ public class Reproductor extends java.applet.Applet {
 		}
 	}
 
+	/**
+	 * obtiene las "lineas" del fichero de audio y reproduce
+	 * @param audioFormat formato del audio
+	 * @return SourceDataLine
+	 * @throws LineUnavailableException
+	 */
 	private static SourceDataLine getLine(AudioFormat audioFormat)
 			throws LineUnavailableException {
 		SourceDataLine res = null;

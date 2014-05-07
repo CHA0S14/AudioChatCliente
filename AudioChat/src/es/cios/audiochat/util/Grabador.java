@@ -11,6 +11,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+import es.cios.audiochat.exceptions.GrabadorException;
+
 public class Grabador extends Thread {
 	// formato de wave
 	private static final AudioFileFormat.Type AUDIO_FILE_FORMAT = AudioFileFormat.Type.WAVE;
@@ -32,7 +34,7 @@ public class Grabador extends Thread {
 	 * 
 	 * @return file que contiene el audio grabado
 	 */
-	public static void grabar() {
+	public static void grabar() throws GrabadorException{
 		try {
 			file = File.createTempFile("Grabacion.wave", null);
 			DataLine.Info dLI = new DataLine.Info(TargetDataLine.class,
@@ -43,11 +45,9 @@ public class Grabador extends Thread {
 			new Grabador();			
 				
 		} catch (LineUnavailableException e) {
-			// TODO Crear excepción de grabador
-			e.printStackTrace();
+			throw new GrabadorException("Error en la grabacion: " + e.getMessage(), e);
 		} catch (IOException e) {
-			// TODO Crear excepción de grabador
-			e.printStackTrace();
+			throw new GrabadorException("Error en la grabacion: " + e.getMessage(), e);
 		} 
 		
 	}
@@ -57,12 +57,13 @@ public class Grabador extends Thread {
 		return file;
 	}
 	
-	public void run() {
+	public void run() throws GrabadorException{
 		try {
 			tD.open(AUDIO_FORMAT);
 			tD.start();
 			AudioSystem.write(new AudioInputStream(tD), AUDIO_FILE_FORMAT, file);
 		} catch (Exception e) {
+			throw new GrabadorException("Error en la grabacion: " + e.getMessage(), e);
 		}
 	}
 }
