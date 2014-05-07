@@ -14,8 +14,7 @@ import javax.sound.sampled.TargetDataLine;
 public class Grabador extends Thread {
 	// formato de wave
 	private static final AudioFileFormat.Type AUDIO_FILE_FORMAT = AudioFileFormat.Type.WAVE;
-	private static final AudioFormat AUDIO_FORMAT = new AudioFormat(8000.0F,
-			16, 1, true, false);
+	private static final AudioFormat AUDIO_FORMAT = new AudioFormat(8000.0F,16, 1, true, false);
 
 	private static TargetDataLine tD;
 
@@ -33,7 +32,7 @@ public class Grabador extends Thread {
 	 * 
 	 * @return file que contiene el audio grabado
 	 */
-	public static File grabar() {
+	public static void grabar() {
 		try {
 			file = File.createTempFile("Grabacion.wave", null);
 			DataLine.Info dLI = new DataLine.Info(TargetDataLine.class,
@@ -41,27 +40,28 @@ public class Grabador extends Thread {
 
 			tD = (TargetDataLine) AudioSystem.getLine(dLI);
 
-			new Grabador();
+			new Grabador();			
+				
 		} catch (LineUnavailableException e) {
 			// TODO Crear excepción de grabador
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Crear excepción de grabador
 			e.printStackTrace();
-		}
+		} 
+		
+	}
+
+	public static File endGrabar() {
+		tD.close();
 		return file;
 	}
-
-	public static void endGrabar() {
-		tD.close();
-	}
-
+	
 	public void run() {
 		try {
 			tD.open(AUDIO_FORMAT);
 			tD.start();
-			AudioSystem
-					.write(new AudioInputStream(tD), AUDIO_FILE_FORMAT, file);
+			AudioSystem.write(new AudioInputStream(tD), AUDIO_FILE_FORMAT, file);
 		} catch (Exception e) {
 		}
 	}
