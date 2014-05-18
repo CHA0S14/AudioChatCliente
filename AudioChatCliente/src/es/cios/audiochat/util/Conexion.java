@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -16,18 +17,16 @@ public class Conexion extends Thread {
 	private static Socket socket = null;
 	private static boolean seguir = true;
 
-	public static void conectar() {
+	public static void conectar() throws ConexionException{
 		try {
 			if (socket == null) {
-				socket = new Socket("localhost", 9999);
+				socket = new Socket("localhost", 9999);	
 				recibirCanales();
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ConexionException("Error de conexion: " + e.getMessage(),e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ConexionException("Error de conexion: " + e.getMessage(),e);
 		}
 	}
 
@@ -35,11 +34,7 @@ public class Conexion extends Thread {
 	private static void recibirCanales() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			while (seguir) {
-				AudioChatService.setCanales((ArrayList<Canal>)in.readObject());
-			}
-			in.close();
-			socket.close();
+			AudioChatService.setCanales((ArrayList<Canal>)in.readObject());
 		} catch (IOException e) {
 			throw new ConexionException("Error al recibir el objeto: "
 					+ e.getMessage(), e);
@@ -74,4 +69,18 @@ public class Conexion extends Thread {
 		}
 	}
 
+	public static Socket getSocket(){
+		return Conexion.socket;
+	}
+
+	public static void enviarObjeto(Object obj) {
+		try {
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			out.writeObject(obj);
+			out.flush();
+		} catch (IOException e) {
+			throw new ConexionException("Error al enviar el objeto: "
+					+ e.getMessage(), e);
+		}
+	}
 }
