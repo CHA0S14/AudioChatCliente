@@ -21,18 +21,20 @@ import javax.swing.tree.DefaultTreeModel;
 import es.cios.audiochat.entities.Canal;
 import es.cios.audiochat.entities.Cliente;
 import es.cios.audiochat.entities.SubCanal;
+import es.cios.audiochat.interfaz.listeners.ActionListenerPer;
 import es.cios.audiochat.servicios.AudioChatService;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField mensaje;
 	private DefaultMutableTreeNode canales = null;
 	private DefaultMutableTreeNode canal = null;
 	private DefaultMutableTreeNode subCanal = null;
 	private DefaultMutableTreeNode cliente = null;
 	private JTree tree;
+	private JTextArea conversacion;
 
 	/**
 	 * Launch the application.
@@ -86,16 +88,18 @@ public class MainFrame extends JFrame {
 		chatPanel.add(panelEscribir, BorderLayout.SOUTH);
 		panelEscribir.setLayout(new BoxLayout(panelEscribir, BoxLayout.X_AXIS));
 
-		textField = new JTextField();
-		panelEscribir.add(textField);
-		textField.setColumns(10);
+		mensaje = new JTextField();
+		panelEscribir.add(mensaje);
+		mensaje.setColumns(10);
 
-		JButton btnNewButton = new JButton("Enviar");
-		panelEscribir.add(btnNewButton);
+		JButton btnEnviar = new JButton("Enviar");
+		btnEnviar.addActionListener(new ActionListenerPer());
+		btnEnviar.setActionCommand("enviar");
+		panelEscribir.add(btnEnviar);
 
-		JTextArea textArea = new JTextArea();
-		chatPanel.add(textArea, BorderLayout.CENTER);
-		textArea.setEditable(false);
+		conversacion = new JTextArea();
+		chatPanel.add(conversacion, BorderLayout.CENTER);
+		conversacion.setEditable(false);
 	}
 
 	private JTree crearJTree() {
@@ -139,5 +143,15 @@ public class MainFrame extends JFrame {
 		}
 		DefaultTreeModel model = new DefaultTreeModel(this.canales);
 		tree.setModel(model);
+	}
+
+	public String getMensaje() {
+		String texto = this.mensaje.getText();
+		this.mensaje.setText("");
+		return texto;
+	}
+
+	public void escribir(String text) {
+		this.conversacion.append(text);
 	}
 }

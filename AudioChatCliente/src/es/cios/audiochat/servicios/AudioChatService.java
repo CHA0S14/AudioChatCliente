@@ -39,13 +39,9 @@ public class AudioChatService {
 		return canales;
 	}
 
-	public static void setCanales(List<Canal> canales) {
-		AudioChatService.canales = canales;
-	}
-
-	public static void escribirMensaje(String readLine) {
-		// TODO Auto-generated method stub
-
+	public static void escribirMensaje() {
+		String texto = frame.getMensaje() + "\n";
+		Conexion.enviarObjeto(texto);
 	}
 
 	public static void setCanales(ArrayList<Canal> canales) {
@@ -53,10 +49,12 @@ public class AudioChatService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void recibirObjeto(Object obj, InetAddress localAddress) {
+	public static void recibirObjeto(Object obj, InetAddress inetAddress) {
 		if (obj instanceof List) {
-			canales = (List<Canal>) obj;
+			setCanales((ArrayList<Canal>) obj);
 			frame.actualizarJTree();
+		}else if (obj instanceof String){
+			frame.escribir((String) obj);
 		}
 
 	}
