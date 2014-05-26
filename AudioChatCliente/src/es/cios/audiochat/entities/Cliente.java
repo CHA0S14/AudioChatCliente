@@ -1,8 +1,8 @@
 package es.cios.audiochat.entities;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 import es.cios.audiochat.exceptions.ClienteException;
 
@@ -11,11 +11,11 @@ public class Cliente implements Serializable{
 	private int canal, subCanal = -1;
 	private transient Socket socket;
 	private String nombre;
-	private InetAddress inetAddress;
+	private SocketAddress socketAddress;
 
 	public void addSocket(Socket socket) {
 		this.socket = socket;
-		this.inetAddress = socket.getInetAddress();
+		this.socketAddress = socket.getRemoteSocketAddress();
 	}	
 
 	public int getCanal() {
@@ -50,12 +50,12 @@ public class Cliente implements Serializable{
 		this.nombre = nombre;
 	}
 
-	public InetAddress getInetAddress() {
-		return inetAddress;
+	public SocketAddress getSocketAddress() {
+		return socketAddress;
 	}
 
-	public void setInetAddress(InetAddress inetAddress) {
-		this.inetAddress = inetAddress;
+	public void setSocketAddress(SocketAddress socketAddress) {
+		this.socketAddress = socketAddress;
 	}
 
 	public void enviarObjeto(Object canales) throws ClienteException {

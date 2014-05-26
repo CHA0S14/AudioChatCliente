@@ -16,16 +16,17 @@ public class AudioChatService {
 	private static List<Canal> canales = new ArrayList<Canal>();
 	private static MainFrame frame;
 	private static RecibirMensaje recibir;
+	private static String name;
 
 	public static void inciar() {
+		frame = new MainFrame();
 		Conexion.conectar();
 		recibir = new RecibirMensaje(Conexion.getSocket());
-		recibir.start();
-		frame = new MainFrame();		
+		recibir.start();				
 		Nombre nombre = new Nombre();
-		String name = (String) JOptionPane.showInputDialog(frame,
+		name = (String) JOptionPane.showInputDialog(frame,
 				"Que nombre quieres");
-
+		frame.setTitle("Usuario: " + name);;
 		nombre.setNombre(name);
 		enviarNombre(nombre);
 		frame.setVisible(true);		
@@ -40,8 +41,11 @@ public class AudioChatService {
 	}
 
 	public static void escribirMensaje() {
-		String texto = frame.getMensaje() + "\n";
-		Conexion.enviarObjeto(texto);
+		String text = frame.getMensaje();
+		if(!text.equals("")){
+			String texto = name + ": " + text + "\n";
+			Conexion.enviarObjeto(texto);
+		}
 	}
 
 	public static void setCanales(ArrayList<Canal> canales) {
@@ -50,7 +54,7 @@ public class AudioChatService {
 
 	@SuppressWarnings("unchecked")
 	public static void recibirObjeto(Object obj, InetAddress inetAddress) {
-		if (obj instanceof List) {
+		if (obj instanceof ArrayList) {
 			setCanales((ArrayList<Canal>) obj);
 			frame.actualizarJTree();
 		}else if (obj instanceof String){

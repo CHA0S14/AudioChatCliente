@@ -22,6 +22,7 @@ import es.cios.audiochat.entities.Canal;
 import es.cios.audiochat.entities.Cliente;
 import es.cios.audiochat.entities.SubCanal;
 import es.cios.audiochat.interfaz.listeners.ActionListenerPer;
+import es.cios.audiochat.interfaz.listeners.KeyListenerPer;
 import es.cios.audiochat.servicios.AudioChatService;
 
 @SuppressWarnings("serial")
@@ -91,6 +92,7 @@ public class MainFrame extends JFrame {
 		mensaje = new JTextField();
 		panelEscribir.add(mensaje);
 		mensaje.setColumns(10);
+		mensaje.addKeyListener(new KeyListenerPer());
 
 		JButton btnEnviar = new JButton("Enviar");
 		btnEnviar.addActionListener(new ActionListenerPer());
@@ -99,7 +101,7 @@ public class MainFrame extends JFrame {
 
 		conversacion = new JTextArea();
 		chatPanel.add(conversacion, BorderLayout.CENTER);
-		conversacion.setEditable(false);
+		conversacion.setEditable(false);	
 	}
 
 	private JTree crearJTree() {

@@ -5,9 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
-import es.cios.audiochat.entities.Canal;
 import es.cios.audiochat.exceptions.ConexionException;
 import es.cios.audiochat.servicios.AudioChatService;
 
@@ -54,10 +52,10 @@ public class Conexion {
 	}
 
 
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	private static void recibirCanales() {
 		try {			
-			AudioChatService.setCanales((ArrayList<Canal>)getIn().readObject());
+			AudioChatService.recibirObjeto(getIn().readObject(), socket.getInetAddress());
 		} catch (IOException e) {
 			throw new ConexionException("Error al recibir el objeto: "
 					+ e.getMessage(), e);
