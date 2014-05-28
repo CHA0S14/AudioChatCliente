@@ -25,20 +25,27 @@ public class AudioDialog extends JDialog {
 
 	public AudioDialog(Frame owner, boolean modal) {
 		super(owner, modal);
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public AudioDialog() {
-		setBounds(100, 100, 450, 204);
+		
+		setBounds(100, 100, 400, 151);
 		getContentPane().setLayout(null);
 		
 		JLabel lblMensaje = new JLabel("Has recibido un mensaje de audio que desea hacer:");
-		lblMensaje.setBounds(97, 39, 254, 25);
+		lblMensaje.setBounds(42, 23, 299, 14);
 		getContentPane().add(lblMensaje);
 		
 		JButton btnReproducir = new JButton("Reproducir");
+		btnReproducir.setBounds(42, 48, 104, 23);
+		getContentPane().add(btnReproducir);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBounds(247, 48, 94, 23);
+		getContentPane().add(btnCancelar);
+		btnCancelar.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnReproducir.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -46,17 +53,5 @@ public class AudioDialog extends JDialog {
 				dispose();
 			}
 		});
-		btnReproducir.setBounds(80, 105, 89, 23);
-		getContentPane().add(btnReproducir);
-		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnCancelar.setBounds(279, 105, 89, 23);
-		getContentPane().add(btnCancelar);
 	}
 }

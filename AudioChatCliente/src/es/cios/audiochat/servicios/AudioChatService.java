@@ -72,7 +72,6 @@ public class AudioChatService {
 	public static void enviarAudio() throws ServiceException {
 		try {
 			File f = getFile();
-
 			byte[] content = Files.readAllBytes(f.toPath());
 			MensajeAudio mensaje = new MensajeAudio(getName(), content);
 
@@ -106,7 +105,7 @@ public class AudioChatService {
 				//Crea el dialog
 				AudioDialog dialog = new AudioDialog(frame,false);
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setTitle(mensaje.getUser());
+				dialog.setTitle("Emisor: " + mensaje.getUser());
 				dialog.setFile(file);
 				dialog.setVisible(true);				
 			}
