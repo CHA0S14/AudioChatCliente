@@ -1,4 +1,4 @@
-package es.cios.audiochat.interfaz.listeners;
+package es.cios.audiochat.gui.listeners;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

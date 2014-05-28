@@ -36,7 +36,7 @@ public class Grabador extends Thread {
 	 */
 	public static void grabar() throws GrabadorException{
 		try {
-			file = File.createTempFile("Grabacion.wave", null);
+			file = File.createTempFile("GrabacionRecibida", ".wave");
 			DataLine.Info dLI = new DataLine.Info(TargetDataLine.class,
 					AUDIO_FORMAT);
 

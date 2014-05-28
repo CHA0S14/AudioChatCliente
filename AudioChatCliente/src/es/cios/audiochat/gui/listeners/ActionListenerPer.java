@@ -1,4 +1,4 @@
-package es.cios.audiochat.interfaz.listeners;
+package es.cios.audiochat.gui.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +14,7 @@ public class ActionListenerPer implements ActionListener{
 		switch (action) {
 		case "enviar":
 			AudioChatService.escribirMensaje();
-			break;
-
+			break;		
 		default:
 			break;
 		}

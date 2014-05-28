@@ -1,4 +1,4 @@
-package es.cios.audiochat.interfaz;
+package es.cios.audiochat.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,8 +21,9 @@ import javax.swing.tree.DefaultTreeModel;
 import es.cios.audiochat.entities.Canal;
 import es.cios.audiochat.entities.Cliente;
 import es.cios.audiochat.entities.SubCanal;
-import es.cios.audiochat.interfaz.listeners.ActionListenerPer;
-import es.cios.audiochat.interfaz.listeners.KeyListenerPer;
+import es.cios.audiochat.gui.listeners.ActionListenerPer;
+import es.cios.audiochat.gui.listeners.KeyListenerPer;
+import es.cios.audiochat.gui.listeners.MouseListenerPer;
 import es.cios.audiochat.servicios.AudioChatService;
 
 @SuppressWarnings("serial")
@@ -88,6 +89,10 @@ public class MainFrame extends JFrame {
 		JPanel panelEscribir = new JPanel();
 		chatPanel.add(panelEscribir, BorderLayout.SOUTH);
 		panelEscribir.setLayout(new BoxLayout(panelEscribir, BoxLayout.X_AXIS));
+		
+		JButton btnGrabar = new JButton("Grabar");
+		btnGrabar.addMouseListener(new MouseListenerPer());
+		panelEscribir.add(btnGrabar);
 
 		mensaje = new JTextField();
 		panelEscribir.add(mensaje);

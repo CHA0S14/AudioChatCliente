@@ -51,8 +51,6 @@ public class Conexion {
 		return out;
 	}
 
-
-	//@SuppressWarnings("unchecked")
 	private static void recibirCanales() {
 		try {			
 			AudioChatService.recibirObjeto(getIn().readObject(), socket.getInetAddress());
