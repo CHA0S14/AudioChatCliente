@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import es.cios.audiochat.entities.Canal;
+import es.cios.audiochat.entities.CanalMod;
+import es.cios.audiochat.entities.Finalizar;
 import es.cios.audiochat.entities.MensajeAudio;
 import es.cios.audiochat.entities.Nombre;
 import es.cios.audiochat.exceptions.ServiceException;
@@ -31,14 +33,19 @@ public class AudioChatService {
 		Conexion.conectar();
 		recibir = new RecibirMensaje(Conexion.getSocket());
 		recibir.start();
+		cambiarNombre();
+		frame.setVisible(true);
+	}
+
+	public static void cambiarNombre() {
 		Nombre nombre = new Nombre();
 		name = (String) JOptionPane
 				.showInputDialog(frame, "Que nombre quieres");
-		frame.setTitle("Usuario: " + name);
-		;
-		nombre.setNombre(name);
-		enviarNombre(nombre);
-		frame.setVisible(true);
+		if (name != null && !name.equals("")) {
+			frame.setTitle("Usuario: " + name);
+			nombre.setNombre(name);
+			Conexion.enviarObjeto(nombre);
+		}
 	}
 
 	public static String getName() {
@@ -51,10 +58,6 @@ public class AudioChatService {
 
 	public static void setFile(File file) {
 		AudioChatService.file = file;
-	}
-
-	private static void enviarNombre(Nombre nombre) {
-		Conexion.enviarObjeto(nombre);
 	}
 
 	public static List<Canal> getCanales() {
@@ -89,31 +92,68 @@ public class AudioChatService {
 
 	@SuppressWarnings("unchecked")
 	public static void recibirObjeto(Object obj, InetAddress inetAddress) {
-		try {
+		
 			if (obj instanceof ArrayList) {
 				setCanales((ArrayList<Canal>) obj);
 				frame.actualizarJTree();
 			} else if (obj instanceof String) {
 				frame.escribir((String) obj);
 			} else if (obj instanceof MensajeAudio) {
-				//recoge el archivo
-				MensajeAudio mensaje = (MensajeAudio) obj;
-				byte[] content = mensaje.getAudioFile();
-				File file = File.createTempFile("GrabacionRecibida", ".wave");
-				Files.write(file.toPath(), content);
-				
-				//Crea el dialog
-				AudioDialog dialog = new AudioDialog(frame,false);
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setTitle("Emisor: " + mensaje.getUser());
-				dialog.setFile(file);
-				dialog.setVisible(true);				
+				reproducirAudio(obj);
 			}
+	}
+
+	private static void reproducirAudio(Object obj) {
+		try {
+			// recoge el archivo
+			MensajeAudio mensaje = (MensajeAudio) obj;
+			byte[] content = mensaje.getAudioFile();
+			File file = File.createTempFile("GrabacionRecibida", ".wave");
+			Files.write(file.toPath(), content);
+	
+			// Crea el dialog
+			AudioDialog dialog = new AudioDialog(frame, false);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setTitle("Emisor: " + mensaje.getUser());
+			dialog.setFile(file);
+			dialog.setVisible(true);
 		} catch (IOException e) {
 			throw new ServiceException("Error al recibir el audio: "
 					+ e.getMessage(), e);
 		}
-
 	}
+
+	@SuppressWarnings("deprecation")
+	public static void finalizar() {
+		Conexion.enviarObjeto(new Finalizar());
+		recibir.stop();
+		recibir.parar();
+		Conexion.finalizar();
+	}
+
+	public static void cambiarNombreCanal() {
+		int canal = -1;
+		int subCanal = -1;
+		String position = frame.getSelectedNodePosition();
+		position = position.substring(1);
+		String[] numeros = position.split(":");
+		canal = Integer.parseInt(numeros[0]);
+		if (numeros.length > 1){
+			subCanal = Integer.parseInt(numeros[1]);
+		}
+		
+		Canal modCanal = canales.get(canal);
+		if(subCanal>-1){
+			modCanal = modCanal.getSubCanal(subCanal);
+		}
+		
+		String nombre = (String) JOptionPane
+				.showInputDialog(frame, "Que nombre quieres");
+		
+		CanalMod canalMod = new CanalMod(canal, subCanal, nombre, true);
+		Conexion.enviarObjeto(canalMod);
+	}
+	
+	
 
 }

@@ -18,6 +18,12 @@ public class RecibirMensaje extends Thread {
 
 	public void parar() {
 		this.seguir = false;
+		try {
+			socket.close();
+		} catch (IOException e) {
+			throw new ClienteException("Error al cerrar la conexion: "
+					+ e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -27,8 +33,6 @@ public class RecibirMensaje extends Thread {
 				Object object = Conexion.getIn().readObject();
 				AudioChatService.recibirObjeto(object, socket.getInetAddress());
 			}
-			Conexion.getIn().close();
-			socket.close();
 		} catch (IOException e) {
 			throw new ClienteException("Error al crear la conexion: "
 					+ e.getMessage(), e);

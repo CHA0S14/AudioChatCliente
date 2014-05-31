@@ -7,7 +7,9 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -17,6 +19,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 import es.cios.audiochat.entities.Canal;
 import es.cios.audiochat.entities.Cliente;
@@ -24,6 +28,7 @@ import es.cios.audiochat.entities.SubCanal;
 import es.cios.audiochat.gui.listeners.ActionListenerPer;
 import es.cios.audiochat.gui.listeners.KeyListenerPer;
 import es.cios.audiochat.gui.listeners.MouseListenerPer;
+import es.cios.audiochat.gui.listeners.WindowListenerPer;
 import es.cios.audiochat.servicios.AudioChatService;
 
 @SuppressWarnings("serial")
@@ -37,6 +42,10 @@ public class MainFrame extends JFrame {
 	private DefaultMutableTreeNode cliente = null;
 	private JTree tree;
 	private JTextArea conversacion;
+	
+	public JTree getTree() {
+		return tree;
+	}
 
 	/**
 	 * Launch the application.
@@ -51,14 +60,20 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		
+		this.addWindowListener(new WindowListenerPer());
 
-		JMenuBar menuBar = new JMenuBar();
-		// TODO una menu bar en condiciones
-		/*
-		 * JMenu programa = new JMenu("Programa"); JMenu ayuda = new
-		 * JMenu("Ayuda"); menuBar.add(programa); JMenuItem menuItem = new
-		 * JMenuItem("hola"); programa.add(menuItem); menuBar.add(ayuda);
-		 */
+		JMenuBar menuBar = new JMenuBar();		
+		JMenu programa = new JMenu("Editar"); 
+		JMenuItem changeName = new JMenuItem("Cambiar Nombre");
+		menuBar.add(programa); 
+		//JMenu menuItem = new JMenuItem("hola"); 
+		//programa.add(menuItem); 
+		programa.add(changeName);
+		
+		changeName.addActionListener(new ActionListenerPer());
+		changeName.setActionCommand("cambiarNombre");
+		 
 		setJMenuBar(menuBar);
 
 		contentPane = new JPanel();
@@ -91,7 +106,8 @@ public class MainFrame extends JFrame {
 		panelEscribir.setLayout(new BoxLayout(panelEscribir, BoxLayout.X_AXIS));
 		
 		JButton btnGrabar = new JButton("Grabar");
-		btnGrabar.addMouseListener(new MouseListenerPer());
+		btnGrabar.addActionListener(new ActionListenerPer());
+		btnGrabar.setActionCommand("grabar");
 		panelEscribir.add(btnGrabar);
 
 		mensaje = new JTextField();
@@ -113,7 +129,9 @@ public class MainFrame extends JFrame {
 		canales = new DefaultMutableTreeNode("Lista Canales");
 
 		JTree tree = new JTree(canales);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.setBorder(new LineBorder(new Color(0, 0, 0)));
+		tree.addMouseListener(new MouseListenerPer());
 
 		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree
 				.getCellRenderer();
@@ -133,7 +151,7 @@ public class MainFrame extends JFrame {
 			this.canales.add(this.canal);
 			List<Cliente> clientes = canal.getClientes();
 			for (Cliente cliente : clientes) {
-				this.cliente = new DefaultMutableTreeNode(cliente.getNombre());
+				this.cliente = new DefaultMutableTreeNode(cliente.getNombre(),false);
 				this.canal.add(this.cliente);
 			}
 			List<SubCanal> subCanales = canal.getSubCanales();
@@ -143,7 +161,7 @@ public class MainFrame extends JFrame {
 				clientes = subCanal.getClientes();
 				for (Cliente cliente : clientes) {
 					this.cliente = new DefaultMutableTreeNode(
-							cliente.getNombre());
+							cliente.getNombre(), false);
 					this.subCanal.add(this.cliente);
 				}
 			}
@@ -160,5 +178,27 @@ public class MainFrame extends JFrame {
 
 	public void escribir(String text) {
 		this.conversacion.append(text);
+	}
+	
+	public String getSelectedNodePosition(){
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		String position = getNodeIndex(tree, node); 
+		return position;
+	}
+	
+	private String getNodeIndex(JTree tree, TreeNode node) {
+	    TreeNode root = (TreeNode) tree.getModel().getRoot();
+	    if (node == root) {
+	        return "";
+	    }
+	    TreeNode parent = node.getParent();
+	    if (parent == null) {
+	        return null;
+	    }
+	    String parentIndex= getNodeIndex(tree, parent);
+	    if (parentIndex == null) {
+	        return null;
+	    }
+	    return parentIndex+":"+parent.getIndex(node);
 	}
 }
