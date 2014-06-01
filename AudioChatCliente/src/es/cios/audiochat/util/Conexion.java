@@ -77,7 +77,8 @@ public class Conexion {
 	}
 
 	public static void enviarObjeto(Object obj) {
-		try {			
+		try {	
+			getOut().reset();
 			getOut().writeObject(obj);
 			getOut().flush();
 		} catch (IOException e) {

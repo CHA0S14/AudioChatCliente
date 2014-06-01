@@ -9,6 +9,8 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import es.cios.audiochat.servicios.AudioChatService;
+
 public class MouseListenerPer extends MouseAdapter{
 	
 	
@@ -19,11 +21,10 @@ public class MouseListenerPer extends MouseAdapter{
 		Object obj = e.getSource();
 		if (obj instanceof JTree){
 			JTree tree = (JTree)obj;
-			int selRow = tree.getRowForLocation(e.getX(), e.getY());
-		    if(selRow != -1) {
-		        if(SwingUtilities.isRightMouseButton(e)) {
-		        	int row = tree.getClosestRowForLocation(e.getX(), e.getY()); 
-		        	tree.setSelectionRow(row);  
+			int row = tree.getRowForLocation(e.getX(), e.getY());
+			tree.setSelectionRow(row);
+		    if(row != -1) {
+		        if(SwingUtilities.isRightMouseButton(e)) {		        	  
 		        	DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		        	if(node.getAllowsChildren()){
 		        		JPopupMenu popup = new JPopupMenu();
@@ -49,6 +50,10 @@ public class MouseListenerPer extends MouseAdapter{
 		        		}
 
 		    			popup.show(tree, e.getX(), e.getY());
+		        	}
+		        }else{
+		        	if(e.getClickCount()==2){
+		        		AudioChatService.moverCanal();
 		        	}
 		        }
 		    }
