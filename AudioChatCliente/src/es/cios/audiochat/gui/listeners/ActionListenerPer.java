@@ -25,7 +25,7 @@ public class ActionListenerPer implements ActionListener{
 			AudioChatService.cambiarNombreCanal();
 			break;
 		case "crearSubCanal":
-			System.out.println("sub canaaal");
+			AudioChatService.crearSubCanal();
 			break;
 		case "grabar":
 			buton = (JButton) e.getSource();

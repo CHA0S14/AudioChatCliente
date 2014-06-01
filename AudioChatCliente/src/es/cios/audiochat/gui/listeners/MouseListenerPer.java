@@ -28,8 +28,9 @@ public class MouseListenerPer extends MouseAdapter{
 		        	if(node.getAllowsChildren()){
 		        		JPopupMenu popup = new JPopupMenu();
 		        		
-		        		if(node.getPreviousNode()==null || node.getPreviousNode().getParent()==null){
+		        		if(node.getParent()==null || node.getParent().getParent()==null){
 		        			JMenuItem crearSubCanal;
+		        			
 			        		if(node.getParent() == null){
 			        			crearSubCanal = new JMenuItem("Crear canal");
 			        		}else{

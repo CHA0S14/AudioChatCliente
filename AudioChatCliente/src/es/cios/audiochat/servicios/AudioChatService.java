@@ -153,7 +153,19 @@ public class AudioChatService {
 		CanalMod canalMod = new CanalMod(canal, subCanal, nombre, true);
 		Conexion.enviarObjeto(canalMod);
 	}
-	
-	
 
+	public static void crearSubCanal() {
+		int canal = -1;
+		String position = frame.getSelectedNodePosition();
+		
+		if (!position.equals("")){
+			position = position.substring(1);
+			canal = Integer.parseInt(position);
+		}
+		String nombre = (String) JOptionPane
+				.showInputDialog(frame, "Que nombre quieres");
+		
+		CanalMod canalMod = new CanalMod(canal, nombre);
+		Conexion.enviarObjeto(canalMod);
+	}
 }
