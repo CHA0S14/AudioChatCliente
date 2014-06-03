@@ -42,7 +42,7 @@ public class MouseListenerPer extends MouseAdapter{
 			        		crearSubCanal.setActionCommand("crearSubCanal"); 		        		
 			    			popup.add(crearSubCanal);
 		        		}
-		        		if(node.getParent() != null){
+		        		if(node.getParent() != null && !((String)node.getUserObject()).equals("C: Main chanel")){
 			    			JMenuItem cambiarNombre = new JMenuItem("cambiar Nombre");
 			    			cambiarNombre.addActionListener(new ActionListenerPer());
 			    			cambiarNombre.setActionCommand("cambiarNombreCanal");
