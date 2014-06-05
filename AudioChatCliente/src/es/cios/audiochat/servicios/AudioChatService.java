@@ -175,17 +175,21 @@ public class AudioChatService {
 		int canal = -1;
 		int subCanal = -1;
 		String position = frame.getSelectedNodePosition();
-		position = position.substring(1);
-		String[] numeros = position.split(":");
-		canal = Integer.parseInt(numeros[0]);
-		if (numeros.length > 1){
-			int numClientes = canales.get(canal).getClientes().size();
-			subCanal = Integer.parseInt(numeros[1]) - numClientes;
+		try{
+			position = position.substring(1);
+			String[] numeros = position.split(":");
+			canal = Integer.parseInt(numeros[0]);
+			if (numeros.length > 1){
+				int numClientes = canales.get(canal).getClientes().size();
+				subCanal = Integer.parseInt(numeros[1]) - numClientes;
+			}
+			
+			Cliente cliente = new Cliente();
+			cliente.setCanal(canal);
+			cliente.setSubCanal(subCanal);
+			Conexion.enviarObjeto(cliente);
+		}catch(StringIndexOutOfBoundsException e){
+			
 		}
-		
-		Cliente cliente = new Cliente();
-		cliente.setCanal(canal);
-		cliente.setSubCanal(subCanal);
-		Conexion.enviarObjeto(cliente);
 	}
 }
