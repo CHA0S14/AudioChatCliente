@@ -2,7 +2,6 @@ package es.cios.audiochat.servicios;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,11 @@ import es.cios.audiochat.gui.AudioDialog;
 import es.cios.audiochat.gui.MainFrame;
 import es.cios.audiochat.hilos.RecibirMensaje;
 import es.cios.audiochat.util.Conexion;
-
+ /**
+  * 
+  * @author Chaos
+  *
+  */
 public class AudioChatService {
 	private static List<Canal> canales = new ArrayList<Canal>();
 	private static MainFrame frame;
@@ -29,6 +32,9 @@ public class AudioChatService {
 	private static String name;
 	private static File file;
 
+	/**
+	 * inicia el programa
+	 */
 	public static void inciar() {
 		frame = new MainFrame();
 		Conexion.conectar();
@@ -38,6 +44,9 @@ public class AudioChatService {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * se encarga de mostrar un dialogo pidiendo el nombre y lo envia al servidor
+	 */
 	public static void cambiarNombre() {
 		Nombre nombre = new Nombre();
 		name = (String) JOptionPane
@@ -49,22 +58,37 @@ public class AudioChatService {
 		}
 	}
 
+	/**
+	 * @return the name
+	 */
 	public static String getName() {
 		return name;
 	}
 
+	/**
+	 * @return the file
+	 */
 	public static File getFile() {
 		return file;
 	}
 
-	public static void setFile(File file) {
-		AudioChatService.file = file;
-	}
-
+	/**
+	 * @return the canales
+	 */
 	public static List<Canal> getCanales() {
 		return canales;
 	}
 
+	/**
+	 * @param file the file to set
+	 */
+	public static void setFile(File file) {
+		AudioChatService.file = file;
+	}
+
+	/**
+	 * se encarga de recojer el texto y enviarlo al servidor
+	 */
 	public static void escribirMensaje() {
 		String text = frame.getMensaje();
 		if (!text.equals("")) {
@@ -73,9 +97,14 @@ public class AudioChatService {
 		}
 	}
 
+	/**
+	 * recoje el fichero de audio y lo envia
+	 * @throws ServiceException
+	 */
 	public static void enviarAudio() throws ServiceException {
 		try {
 			File f = getFile();
+			//se tansforma en byte[] para enviar su contenido
 			byte[] content = Files.readAllBytes(f.toPath());
 			MensajeAudio mensaje = new MensajeAudio(getName(), content);
 
@@ -87,13 +116,19 @@ public class AudioChatService {
 
 	}
 
-	public static void setCanales(ArrayList<Canal> canales) {
+	/**
+	 * @param canales the canales to set
+	 */
+	public static void setCanales(List<Canal> canales) {
 		AudioChatService.canales = canales;
 	}
 
+	/**
+	 * recibe el objeto que envia el servidor y dependiendo de que sea realiza una accion
+	 * @param obj obejto recibido
+	 */
 	@SuppressWarnings("unchecked")
-	public static void recibirObjeto(Object obj, InetAddress inetAddress) {
-		
+	public static void recibirObjeto(Object obj) {		
 			if (obj instanceof ArrayList) {
 				setCanales((ArrayList<Canal>) obj);
 				frame.actualizarJTree();
@@ -104,6 +139,10 @@ public class AudioChatService {
 			}
 	}
 
+	/**
+	 * crea un dialog con el boton para reproducir el audio recibido
+	 * @param obj audio
+	 */
 	private static void reproducirAudio(Object obj) {
 		try {
 			// recoge el archivo
@@ -124,6 +163,9 @@ public class AudioChatService {
 		}
 	}
 
+	/**
+	 * finaliza el programa
+	 */
 	@SuppressWarnings("deprecation")
 	public static void finalizar() {
 		Conexion.enviarObjeto(new Finalizar());
@@ -132,6 +174,9 @@ public class AudioChatService {
 		Conexion.finalizar();
 	}
 
+	/**
+	 * cambia el nombre del canal seleccionado
+	 */
 	public static void cambiarNombreCanal() {
 		int canal = -1;
 		int subCanal = -1;
@@ -156,6 +201,9 @@ public class AudioChatService {
 		Conexion.enviarObjeto(canalMod);
 	}
 
+	/**
+	 * crea un subcanal en el canal seleccionado
+	 */
 	public static void crearSubCanal() {
 		int canal = -1;
 		String position = frame.getSelectedNodePosition();
@@ -171,6 +219,9 @@ public class AudioChatService {
 		Conexion.enviarObjeto(canalMod);
 	}
 
+	/**
+	 * mueve al cliente al canal seleccionado
+	 */
 	public static void moverCanal() {
 		int canal = -1;
 		int subCanal = -1;

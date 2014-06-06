@@ -7,9 +7,16 @@ import javax.swing.JButton;
 
 import es.cios.audiochat.servicios.AudioChatService;
 import es.cios.audiochat.util.Grabador;
-
+/**
+ * 
+ * @author Chaos
+ *
+ */
 public class ActionListenerPer implements ActionListener{
 
+	/**
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();

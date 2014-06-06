@@ -14,6 +14,10 @@ public class Conexion {
 	private static ObjectInputStream in = null;
 	private static ObjectOutputStream out = null;
 
+	/**
+	 * contructor de la clase
+	 * @throws ConexionException
+	 */
 	public static void conectar() throws ConexionException{
 		try {
 			if (socket == null) {
@@ -27,6 +31,11 @@ public class Conexion {
 		}
 	}	
 
+	
+
+	/**
+	 * @return the in
+	 */
 	public static ObjectInputStream getIn() {
 		if(in==null){
 			try {
@@ -39,6 +48,9 @@ public class Conexion {
 		return in;
 	}
 
+	/**
+	 * @return the out
+	 */
 	public static ObjectOutputStream getOut() {
 		if(out==null){
 			try {
@@ -51,9 +63,12 @@ public class Conexion {
 		return out;
 	}
 
+	/**
+	 * metodo que recibe los canales por primera vez y sirve para sincronizar la conexion
+	 */
 	private static void recibirCanales() {
 		try {			
-			AudioChatService.recibirObjeto(getIn().readObject(), socket.getInetAddress());
+			AudioChatService.recibirObjeto(getIn().readObject());
 		} catch (IOException e) {
 			throw new ConexionException("Error al recibir el objeto: "
 					+ e.getMessage(), e);
@@ -63,6 +78,9 @@ public class Conexion {
 		}
 	}
 
+	/**
+	 * finaliza la conexion
+	 */
 	public static void finalizar() {
 		try {
 			socket.close();
@@ -72,10 +90,17 @@ public class Conexion {
 		}
 	}
 
+	/**
+	 * @return the socket
+	 */
 	public static Socket getSocket(){
 		return Conexion.socket;
 	}
 
+	/**
+	 * envia el objeto recibido al servidor
+	 * @param obj objeto a enviar
+	 */
 	public static void enviarObjeto(Object obj) {
 		try {	
 			getOut().reset();

@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -30,7 +31,11 @@ import es.cios.audiochat.gui.listeners.KeyListenerPer;
 import es.cios.audiochat.gui.listeners.MouseListenerPer;
 import es.cios.audiochat.gui.listeners.WindowListenerPer;
 import es.cios.audiochat.servicios.AudioChatService;
-
+/**
+ * 
+ * @author Chaos
+ *
+ */
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
@@ -51,7 +56,12 @@ public class MainFrame extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		AudioChatService.inciar();
+		try{
+			AudioChatService.inciar();
+		}catch(Exception e){
+			new JOptionPane(e.getMessage());
+			AudioChatService.finalizar();
+		}
 	}
 
 	/**
@@ -125,6 +135,10 @@ public class MainFrame extends JFrame {
 		conversacion.setEditable(false);	
 	}
 
+	/**
+	 * da forma inicial al jTree
+	 * @return el JTree
+	 */
 	private JTree crearJTree() {
 		canales = new DefaultMutableTreeNode("Lista Canales");
 
@@ -143,6 +157,9 @@ public class MainFrame extends JFrame {
 		return tree;
 	}
 
+	/**
+	 * actualiza los datos del JTree
+	 */
 	public void actualizarJTree() {
 		this.canales=new DefaultMutableTreeNode("Lista Canales");
 		List<Canal> canales = AudioChatService.getCanales();
@@ -170,22 +187,40 @@ public class MainFrame extends JFrame {
 		tree.setModel(model);
 	}
 
+	/**
+	 * obtiene el mensaje que ha escrito el usuario
+	 * @return el mensaje
+	 */
 	public String getMensaje() {
 		String texto = this.mensaje.getText();
 		this.mensaje.setText("");
 		return texto;
 	}
 
+	/**
+	 * escribe el mensaje recibido en pantalla
+	 * @param text mensaje recibido
+	 */
 	public void escribir(String text) {
 		this.conversacion.append(text);
 	}
 	
+	/**
+	 * devuelve el nodo del JTree marcado
+	 * @return posicion en formato "x:y"
+	 */
 	public String getSelectedNodePosition(){
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		String position = getNodeIndex(tree, node); 
 		return position;
 	}
 	
+	/**
+	 * devuelve el nodo del JTree marcado
+	 * @param tree arbol de referencia
+	 * @param node nodo al cual sacar el index
+	 * @return posicion en formato "x:y"
+	 */
 	private String getNodeIndex(JTree tree, TreeNode node) {
 	    TreeNode root = (TreeNode) tree.getModel().getRoot();
 	    if (node == root) {

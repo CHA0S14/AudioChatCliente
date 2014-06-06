@@ -10,12 +10,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import es.cios.audiochat.servicios.AudioChatService;
-
+/**
+ * 
+ * @author Chaos
+ *
+ */
 public class MouseListenerPer extends MouseAdapter{
-	
-	
-	
 
+	/**
+	 * @see java.awt.event.MouseAdapter#mousePressed(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		Object obj = e.getSource();
@@ -58,9 +62,5 @@ public class MouseListenerPer extends MouseAdapter{
 		        }
 		    }
 		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
 	}
 }

@@ -37,6 +37,7 @@ public class Grabador extends Thread {
 	public static void grabar() throws GrabadorException{
 		try {
 			file = File.createTempFile("GrabacionRecibida", ".wave");
+			//formato del audio
 			DataLine.Info dLI = new DataLine.Info(TargetDataLine.class,
 					AUDIO_FORMAT);
 
@@ -52,15 +53,25 @@ public class Grabador extends Thread {
 		
 	}
 
+	/**
+	 * finaliza la grabacion
+	 * @return
+	 */
 	public static File endGrabar() {
 		tD.close();
 		return file;
 	}
-	
+
+	/**
+	 * @see java.lang.Thread#run()
+	 */
+	@Override
 	public void run() throws GrabadorException{
 		try {
+			//inicia el proceso de grabacion para dar formato
 			tD.open(AUDIO_FORMAT);
 			tD.start();
+			//escribe los bytes de audio en el fichero
 			AudioSystem.write(new AudioInputStream(tD), AUDIO_FILE_FORMAT, file);
 		} catch (Exception e) {
 			throw new GrabadorException("Error en la grabacion: " + e.getMessage(), e);

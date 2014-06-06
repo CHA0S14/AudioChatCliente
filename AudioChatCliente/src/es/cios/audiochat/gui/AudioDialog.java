@@ -10,19 +10,34 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import es.cios.audiochat.util.Reproductor;
-
+/**
+ * 
+ * @author Chaos
+ *
+ */
 @SuppressWarnings("serial")
 public class AudioDialog extends JDialog {
 	File file;
-	
+
+	/**
+	 * @return the file
+	 */
 	public File getFile() {
 		return file;
 	}
 
+	/**
+	 * @param file the file to set
+	 */
 	public void setFile(File file) {
 		this.file = file;
 	}
 
+	/**
+	 * contructor y ademas le da los elementos al modal
+	 * @param owner frame al cual pertenece
+	 * @param modal si deja utilizar el frame o no
+	 */
 	public AudioDialog(Frame owner, boolean modal) {
 		super(owner, modal);
 		

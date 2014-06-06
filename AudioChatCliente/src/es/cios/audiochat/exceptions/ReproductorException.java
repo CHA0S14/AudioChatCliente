@@ -1,12 +1,24 @@
 package es.cios.audiochat.exceptions;
 
+/**
+ * 
+ * @author Chaos
+ *
+ */
 @SuppressWarnings("serial")
 public class ReproductorException extends RuntimeException{
-	public ReproductorException(String mensaje) {
-		super(mensaje);
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public ReproductorException(String message, Throwable cause) {
+		super(message, cause);
 	}
-	
-	public ReproductorException(String mensaje, Exception causa) {
-		super(mensaje, causa);
+
+	/**
+	 * @param message
+	 */
+	public ReproductorException(String message) {
+		super(message);
 	}
 }

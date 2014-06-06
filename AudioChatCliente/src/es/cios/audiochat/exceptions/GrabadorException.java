@@ -1,12 +1,24 @@
 package es.cios.audiochat.exceptions;
 
+/**
+ * 
+ * @author Chaos
+ *
+ */
 @SuppressWarnings("serial")
 public class GrabadorException extends RuntimeException{
-	public GrabadorException(String mensaje) {
-		super(mensaje);
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public GrabadorException(String message, Throwable cause) {
+		super(message, cause);
 	}
-	
-	public GrabadorException(String mensaje, Exception causa) {
-		super(mensaje, causa);
+
+	/**
+	 * @param message
+	 */
+	public GrabadorException(String message) {
+		super(message);
 	}
 }

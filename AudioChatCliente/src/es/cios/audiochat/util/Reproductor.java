@@ -74,6 +74,7 @@ public class Reproductor extends java.applet.Applet {
 	private static SourceDataLine getLine(AudioFormat audioFormat)
 			throws LineUnavailableException {
 		SourceDataLine res = null;
+		//deformatea el audio para obtener el sonido y reproduce
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class,
 				audioFormat);
 		res = (SourceDataLine) AudioSystem.getLine(info);

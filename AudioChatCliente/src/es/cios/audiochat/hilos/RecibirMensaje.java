@@ -6,16 +6,26 @@ import java.net.Socket;
 import es.cios.audiochat.exceptions.ClienteException;
 import es.cios.audiochat.servicios.AudioChatService;
 import es.cios.audiochat.util.Conexion;
-
+ /**
+  * 
+  * @author Chaos
+  *
+  */
 public class RecibirMensaje extends Thread {
 	private Socket socket;
 	private boolean seguir=true;
 	
-
+	/**
+	 * contructor
+	 * @param socket
+	 */
 	public RecibirMensaje(Socket socket) {
 		this.socket = socket;
 	}
 
+	/**
+	 * para el while del hilo
+	 */
 	public void parar() {
 		this.seguir = false;
 		try {
@@ -26,12 +36,15 @@ public class RecibirMensaje extends Thread {
 		}
 	}
 
+	/**
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() throws ClienteException {
 		try {
 			while (seguir) {
 				Object object = Conexion.getIn().readObject();
-				AudioChatService.recibirObjeto(object, socket.getInetAddress());
+				AudioChatService.recibirObjeto(object);
 			}
 		} catch (IOException e) {
 			throw new ClienteException("Error al crear la conexion: "
